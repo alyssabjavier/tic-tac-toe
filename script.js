@@ -23,13 +23,6 @@ const getNewPlayer = (function() {
     return createPlayer;
 })();
 
-//for testing
-let playerOne = getNewPlayer('alyssa', 'X');
-console.log(playerOne);
-
-let playerTwo = getNewPlayer('yoshi', 'O');
-console.log(playerTwo);
-
 //gameController
 //each player picks a tile aka chooses an empty grid cell to set to their marker
 function markCell(player, row, column) {
@@ -57,31 +50,22 @@ function switchPlayerTurn() {
 //for console purposes, return the gameboard every turn
 // playGame 
 
-//choose spot on game board
-//winning conditions
-function checkWinnn(player) {
-    const winConditions = [
-            // Rows
-            [[0, 0], [0, 1], [0, 2]], // Row 1
-            [[1, 0], [1, 1], [1, 2]], // Row 2
-            [[2, 0], [2, 1], [2, 2]], // Row 3
-        
-            // Columns
-            [[0, 0], [1, 0], [2, 0]], // Column 1
-            [[0, 1], [1, 1], [2, 1]], // Column 2
-            [[0, 2], [1, 2], [2, 2]], // Column 3
-        
-            // Diagonals
-            [[0, 0], [1, 1], [2, 2]], // Top-left to bottom-right diagonal
-            [[0, 2], [1, 1], [2, 0]]  // Top-right to bottom-left diagonal
-        ];
+//check if board is filled/aka tie
+function checkBoard() {
+    for (i=0; i<2; i++) {
+        for (j=0; j<2; j++); {
+            if (Gameboard.gameboard[i][j]===null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
-markCell(playerTwo, 0, 0);
-markCell(playerTwo, 1, 1);
-markCell(playerTwo, 2, 2);
-
-const winConditions = [
+//winning conditions
+function checkWin() {
+    const winConditions = [
         // rows
         [[0, 0], [0, 1], [0, 2]], // row 1
         [[1, 0], [1, 1], [1, 2]], // row 2
@@ -97,7 +81,6 @@ const winConditions = [
         [[0, 2], [1, 1], [2, 0]]  // top-right to bottom-left diagonal
     ];
 
-function checkWin(winConditions) {
     winConditions.forEach(condition => {
         let [[a,b], [c,d], [e,f]] = condition;
 
@@ -114,10 +97,22 @@ function checkWin(winConditions) {
     return `${winner.name} wins`;
 }
 
+//for testing
 
+let playerOne = getNewPlayer('alyssa', 'X');
+console.log(playerOne);
 
-if (Gameboard.gameboard[0][0] && Gameboard.gameboard[1][1] && Gameboard.gameboard[2][2] === 'X') {
-    console.log('playerOne wins');
-}
+let playerTwo = getNewPlayer('yoshi', 'O');
+console.log(playerTwo);
 
-//Gameboard.gameboard[0][0] === Gameboard.gameboard[1][1] && Gameboard.gameboard[0][0] === Gameboard.gameboard[2][2]
+markCell(playerTwo, 0, 0);
+markCell(playerTwo, 0, 1);
+markCell(playerTwo, 0, 2);
+
+markCell(playerOne, 1, 0);
+markCell(playerOne, 1, 1);
+markCell(playerOne, 1, 2);
+
+markCell(playerTwo, 2, 0);
+markCell(playerTwo, 2, 1);
+markCell(playerTwo, 2, 2);
