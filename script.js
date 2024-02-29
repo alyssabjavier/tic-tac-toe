@@ -81,7 +81,7 @@ markCell(playerTwo, 0, 0);
 markCell(playerTwo, 1, 1);
 markCell(playerTwo, 2, 2);
 
-    const winConditions = [
+const winConditions = [
         // rows
         [[0, 0], [0, 1], [0, 2]], // row 1
         [[1, 0], [1, 1], [1, 2]], // row 2
@@ -96,19 +96,22 @@ markCell(playerTwo, 2, 2);
         [[0, 0], [1, 1], [2, 2]], // top-left to bottom-right diagonal
         [[0, 2], [1, 1], [2, 0]]  // top-right to bottom-left diagonal
     ];
-function checkWin(a, b, c, d, e, f) {
 
+function checkWin(winConditions) {
+    winConditions.forEach(condition => {
+        let [[a,b], [c,d], [e,f]] = condition;
 
-
-    //if all 3 cells have the same marker
-    if (Gameboard.gameboard[a][b] === Gameboard.gameboard[c][d] && Gameboard.gameboard[a][b] === Gameboard.gameboard[e][f]) {
-        if (Gameboard.gameboard[a][b] === playerOne.marker) {
-            return `${playerOne.name} wins`;
-        };
-        if (Gameboard.gameboard[a][b] === playerTwo.marker) {
-            return `${playerTwo.name} wins`;
-        };
-    }
+        //if all 3 cells have the same marker
+        if (Gameboard.gameboard[a][b] === Gameboard.gameboard[c][d] && Gameboard.gameboard[a][b] === Gameboard.gameboard[e][f]) {
+            if (Gameboard.gameboard[a][b] === playerOne.marker) {
+                winner = playerOne;
+            };
+            if (Gameboard.gameboard[a][b] === playerTwo.marker) {
+                winner = playerTwo;
+            };
+        }
+    });
+    return `${winner.name} wins`;
 }
 
 
