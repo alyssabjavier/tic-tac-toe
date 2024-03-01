@@ -26,7 +26,6 @@ const getNewPlayer = (function() {
 //gameController
 
 //each player picks a tile aka chooses an empty grid cell to set to their marker
-
 function markCell(row, column) {
     if (Gameboard.gameboard[row][column] === null) {
         Gameboard.gameboard[row][column] = activePlayer.marker;
@@ -40,7 +39,8 @@ function playRound(row, column) {
     markCell(row, column);
     switchPlayerTurn();
     checkBoard();
-    return Gameboard.showBoard();
+    // console.log(Gameboard.gameboard);
+    return checkWin();
 }
 
 //switch turns
@@ -62,16 +62,15 @@ function switchPlayerTurn() {
 // playGame 
 
 //check if board is filled/aka tie
-function checkBoard() {
-    for (i=0; i<2; i++) {
-        for (j=0; j<2; j++); {
+const checkBoard = function() {
+    for (let i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
             if (Gameboard.gameboard[i][j]===null) {
                 return true;
-            } else {
-                return false;
             }
         }
     }
+    return false;
 }
 
 //winning conditions
@@ -105,7 +104,7 @@ function checkWin() {
             winner = playerTwo;
         }
     });
-    if (!winner===null) {
+    if (winner !== null) {
         return `${winner.name} wins`;
     } else {
         return false;
@@ -121,14 +120,13 @@ let activePlayer = playerOne;
 let playerTwo = getNewPlayer('yoshi', 'O');
 console.log(playerTwo);
 
-// markCell(playerTwo, 0, 0);
-// markCell(playerTwo, 0, 1);
-// markCell(playerTwo, 0, 2);
 
-// markCell(playerOne, 1, 0);
-// markCell(playerOne, 1, 1);
-// markCell(playerOne, 1, 2);
-
-// markCell(playerTwo, 2, 0);
-// markCell(playerTwo, 2, 1);
-// markCell(playerTwo, 2, 2);
+ playRound(0,0)
+ playRound(0,1)
+ playRound(0,2)
+ playRound(1,0)
+playRound(1,1)
+playRound(1,2)
+playRound(2,0)
+playRound(2,1)
+playRound(2,2)
