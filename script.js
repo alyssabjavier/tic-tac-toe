@@ -10,8 +10,7 @@ const Gameboard = {
     }
 };
 
-//users: use constructor to be able to make new players
-//for console: will be able to type getNewPlayer('name', 'marker')
+//constructor for making new players
 const getNewPlayer = (function() {
     function Player(name, marker) {
         this.name = name;
@@ -23,110 +22,116 @@ const getNewPlayer = (function() {
     return createPlayer;
 })();
 
-//gameController
+const gameController = {
 
-//each player picks a tile aka chooses an empty grid cell to set to their marker
-function markCell(row, column) {
-    if (Gameboard.gameboard[row][column] === null) {
-        Gameboard.gameboard[row][column] = activePlayer.marker;
-        return true;
-    } else {
-        return false;
-    }
-};
+    playerOne: null,
+    playerTwo: null,
+    activePlayer: null,
+    initializeGame(playerOneName, playerOneMarker, playerTwoName, playerTwoMarker) {
+        this.playerOne = getNewPlayer(playerOneName, playerOneMarker);
+        this.playerTwo = getNewPlayer(playerTwoName, playerTwoMarker);
+        this.activePlayer = this.playerOne;
+    },
 
-function playRound(row, column) {
-    markCell(row, column);
-    switchPlayerTurn();
-    checkBoard();
-    // console.log(Gameboard.gameboard);
-    return checkWin();
-}
+    markCell(row, column) {
+        if (Gameboard.gameboard[row][column] === null) {
+            Gameboard.gameboard[row][column] = this.activePlayer.marker;
+            return true;
+        } else {
+            return false;
+        }
+    },
 
-//switch turns
-function switchPlayerTurn() {
-    // let activePlayer = playerOne;
-    if (activePlayer === playerOne) {
-        activePlayer = playerTwo;
-        return activePlayer;
-    }
-    if (activePlayer === playerTwo) {
-        activePlayer = playerOne;
-        return activePlayer;
-    }
-}
+    switchPlayerTurn() {
+        if (this.activePlayer === this.playerOne) {
+            this.activePlayer = this.playerTwo;
+            return this.activePlayer;
+        }
+        if (this.activePlayer === this.playerTwo) {
+            this.activePlayer = this.playerOne;
+            return this.activePlayer;
+        }
+    },
 
-//after each tile is put down, win conditions are checked and turn switches
-//loop until win conditions are met or the whole board is filled
-//for console purposes, return the gameboard every turn
-// playGame 
-
-//check if board is filled/aka tie
-const checkBoard = function() {
-    for (let i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
-            if (Gameboard.gameboard[i][j]===null) {
-                return true;
+    checkBoard() {
+        for (let i = 0; i < 3; i++) {
+            for (j = 0; j < 3; j++) {
+                if (Gameboard.gameboard[i][j]===null) {
+                    return true;
+                }
             }
         }
-    }
-    return false;
-}
-
-//winning conditions
-function checkWin() {
-    const winConditions = [
-        // rows
-        [[0, 0], [0, 1], [0, 2]], // row 1
-        [[1, 0], [1, 1], [1, 2]], // row 2
-        [[2, 0], [2, 1], [2, 2]], // row 3
-    
-        // columns
-        [[0, 0], [1, 0], [2, 0]], // column 1
-        [[0, 1], [1, 1], [2, 1]], // column 2
-        [[0, 2], [1, 2], [2, 2]], // column 3
-    
-        // diagonals
-        [[0, 0], [1, 1], [2, 2]], // top-left to bottom-right diagonal
-        [[0, 2], [1, 1], [2, 0]]  // top-right to bottom-left diagonal
-    ];
-    
-    let winner = null;
-
-    winConditions.forEach(condition => {
-        let [[a,b], [c,d], [e,f]] = condition;
-
-        //if all 3 cells have the same marker
-        if (Gameboard.gameboard[a][b] === playerOne.marker && Gameboard.gameboard[c][d] === playerOne.marker && Gameboard.gameboard[e][f] === playerOne.marker) {
-            winner = playerOne;
-        }
-        if (Gameboard.gameboard[a][b] === playerTwo.marker && Gameboard.gameboard[c][d] === playerTwo.marker && Gameboard.gameboard[e][f] === playerTwo.marker) {
-            winner = playerTwo;
-        }
-    });
-    if (winner !== null) {
-        return `${winner.name} wins`;
-    } else {
         return false;
+    },
+
+    checkWin() {
+        const winConditions = [
+            // rows
+            [[0, 0], [0, 1], [0, 2]], // row 1
+            [[1, 0], [1, 1], [1, 2]], // row 2
+            [[2, 0], [2, 1], [2, 2]], // row 3
+        
+            // columns
+            [[0, 0], [1, 0], [2, 0]], // column 1
+            [[0, 1], [1, 1], [2, 1]], // column 2
+            [[0, 2], [1, 2], [2, 2]], // column 3
+        
+            // diagonals
+            [[0, 0], [1, 1], [2, 2]], // top-left to bottom-right diagonal
+            [[0, 2], [1, 1], [2, 0]]  // top-right to bottom-left diagonal
+        ];
+        
+        let winner = null;
+    
+        winConditions.forEach(condition => {
+            let [[a,b], [c,d], [e,f]] = condition;
+    
+            //if all 3 cells have the same marker
+            if (Gameboard.gameboard[a][b] === this.playerOne.marker && Gameboard.gameboard[c][d] === this.playerOne.marker && Gameboard.gameboard[e][f] === this.playerOne.marker) {
+                winner = this.playerOne;
+            }
+            if (Gameboard.gameboard[a][b] === this.playerTwo.marker && Gameboard.gameboard[c][d] === this.playerTwo.marker && Gameboard.gameboard[e][f] === this.playerTwo.marker) {
+                winner = this.playerTwo;
+            }
+        });
+        if (winner !== null) {
+            return `${winner.name} wins`;
+        } else {
+            return false;
+        }
+    },
+
+    playRound(row, column) {
+        
+        //check if any empty cells on gameboard
+        if (!this.checkBoard) {
+            return "TIE. game over!"
+        };
+
+        //check if selected cell is empty
+        if (!this.markCell(row, column)) {
+            return "invalid, choose another square"
+        };
+
+        const result = this.checkWin();
+        if (result) {
+            return result;
+        };
+
+        this.switchPlayerTurn();
+        return Gameboard.showBoard();
     }
+
 }
 
 //for testing
 
-let playerOne = getNewPlayer('alyssa', 'X');
-console.log(playerOne);
-let activePlayer = playerOne;
+gameController.initializeGame('alyssa', 'X', 'yoshi', 'O');
+console.log(gameController.activePlayer);
 
-let playerTwo = getNewPlayer('yoshi', 'O');
-console.log(playerTwo);
-
-
- playRound(0,0)
- playRound(0,1)
- playRound(0,2)
- playRound(1,0)
-playRound(1,1)
-playRound(1,2)
-playRound(2,0)
-playRound(2,1)
-playRound(2,2)
+gameController.playRound(1,0)
+gameController.playRound(1,1)
+gameController.playRound(0,1)
+gameController.playRound(0,0)
+gameController.playRound(0,2)
+// gameController.playRound(2,2)
