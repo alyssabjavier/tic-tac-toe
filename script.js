@@ -10,6 +10,58 @@ const Gameboard = {
     }
 };
 
+const container = document.querySelector('.container');
+
+const webBoard = {
+
+    handleBoardClick(event) {
+        const row = event.target.getAttribute('data-row');
+        const column = event.target.getAttribute('data-column');
+        gameController.playRound(row, column);
+    },
+
+    createNewBoard(row, column) {
+        const boardSquare = document.createElement('div');
+        boardSquare.classList.add('boardSquare');
+        boardSquare.setAttribute('data-row', row);
+        boardSquare.setAttribute('data-column', column);
+
+        if (Gameboard.gameboard[row][column] === null) {
+            boardSquare.textContent = '';
+        } else {
+            boardSquare.textContent = `${Gameboard.gameboard[row][column]}`;
+        }
+        container.appendChild(boardSquare);
+
+        boardSquare.addEventListener('click', this.handleBoardClick);
+    },
+
+    createWebBoard() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                this.createNewBoard(i, j);
+            }}
+    },
+
+    disableBoard() {
+        const boardSquares = document.querySelectorAll('.boardSquare');
+        boardSquares.forEach(boardSquare => {
+            boardSquare.removeEventListener('click', this.handleBoardClick);
+            })
+        },
+
+    updateWebBoard(row, column) {
+        const boardSquare = document.querySelector(`.boardSquare[data-row="${row}"][data-column="${column}"]`)
+
+        if (Gameboard.gameboard[row][column] === null) {
+                    boardSquare.textContent = '';
+        } else {
+                boardSquare.textContent = Gameboard.gameboard[row][column];
+        }
+    }
+
+}
+
 //constructor for making new players
 const getNewPlayer = (function() {
     function Player(name, marker) {
@@ -31,6 +83,7 @@ const gameController = {
         this.playerOne = getNewPlayer(playerOneName, playerOneMarker);
         this.playerTwo = getNewPlayer(playerTwoName, playerTwoMarker);
         this.activePlayer = this.playerOne;
+        webBoard.createWebBoard();
     },
 
     markCell(row, column) {
@@ -95,6 +148,7 @@ const gameController = {
             }
         });
         if (winner !== null) {
+            webBoard.disableBoard();
             return `${winner.name} wins`;
         } else {
             return false;
@@ -113,25 +167,20 @@ const gameController = {
             return "invalid, choose another square"
         };
 
+        webBoard.updateWebBoard(row, column);
+
         const result = this.checkWin();
         if (result) {
-            return result;
+            alert(`${result}`);
         };
 
         this.switchPlayerTurn();
-        return Gameboard.showBoard();
     }
 
 }
 
 //for testing
 
-gameController.initializeGame('alyssa', 'X', 'yoshi', 'O');
+gameController.initializeGame(prompt('player 1: what is your name?'), 'X', prompt('player 1: what is your name?'), 'O');
 console.log(gameController.activePlayer);
 
-gameController.playRound(1,0)
-gameController.playRound(1,1)
-gameController.playRound(0,1)
-gameController.playRound(0,0)
-gameController.playRound(0,2)
-// gameController.playRound(2,2)

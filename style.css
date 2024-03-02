@@ -1,0 +1,14 @@
+.container {
+    max-height: 600px;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    font-size: 35px;
+}
+
+.boardSquare {
+    border: 1px solid #ccc;
+    min-height: 200px;
+    min-width: 200px;
+}
