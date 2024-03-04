@@ -4,11 +4,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    font-size: 35px;
+    font-size: 75px;
 }
 
 .boardSquare {
     border: 1px solid #ccc;
-    min-height: 200px;
-    min-width: 200px;
+    min-height: 150px;
+    min-width: 150px;
 }

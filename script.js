@@ -68,11 +68,12 @@ const gameController = {
     playerOne: null,
     playerTwo: null,
     activePlayer: null,
+    currentPlayer: document.querySelector('.currentPlayer'),
     initializeGame(playerOneName, playerOneMarker, playerTwoName, playerTwoMarker) {
         this.playerOne = getNewPlayer(playerOneName, playerOneMarker);
         this.playerTwo = getNewPlayer(playerTwoName, playerTwoMarker);
         this.activePlayer = this.playerOne;
-        // webBoard.createWebBoard();
+        this.currentPlayer.textContent = `${this.activePlayer.name}'s turn!`;
     },
 
     markCell(row, column) {
@@ -158,13 +159,15 @@ const gameController = {
 
         webBoard.updateWebBoard(row, column);
 
+        this.switchPlayerTurn();
+        this.currentPlayer.textContent = `${this.activePlayer.name}'s turn!`;
+
         const result = this.checkWin();
         if (result) {
+            this.currentPlayer.textContent = 'game over';
             const winnerAlert = document.querySelector('.winnerAlert');
             winnerAlert.textContent = `${result}!`;
         };
-
-        this.switchPlayerTurn();
     }
 
 }
