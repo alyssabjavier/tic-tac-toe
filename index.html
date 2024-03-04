@@ -7,9 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        
+    <div class="form">
+        <div class="name">
+            <h2>Player 1</h2>
+            <label for="playerOneName">What is your name?</label>
+            <input type="text" id="playerOneName" name="playerOneName">
+        </div>
+        <div class="name">
+            <h2>Player 2</h2>
+            <label for="playerTwoName">What is your name?</label>
+            <input type="text" id="playerTwoName" name="playerTwoName">
+        </div>
+        <button class="play">
+            Play game!
+        </button>
     </div>
+    <div class="container"></div>
+    <h1 class="winnerAlert"></h1>
+
     <script src="script.js"></script>
 </body>
 </html>
